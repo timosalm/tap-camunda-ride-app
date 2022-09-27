@@ -24,7 +24,7 @@ public class HighMobilityResource {
     private final HighMobilityApplicationService highMobilityApplicationService;
 
     @Value("${highmoblity.api-secret}")
-    private String highMoblityApiSecret;
+    private String highMobilityApiSecret;
 
     HighMobilityResource(HighMobilityApplicationService highMobilityApplicationService) {
         this.highMobilityApplicationService = highMobilityApplicationService;
@@ -55,7 +55,7 @@ public class HighMobilityResource {
     }
 
     private boolean isInvalidSignature(String signature, String body) {
-        var computed = String.format("sha1=%s", new HmacUtils(HmacAlgorithms.HMAC_SHA_1, highMoblityApiSecret).hmacHex(body));
+        var computed = String.format("sha1=%s", new HmacUtils(HmacAlgorithms.HMAC_SHA_1, highMobilityApiSecret).hmacHex(body));
         return !MessageDigest.isEqual(signature.getBytes(), computed.getBytes());
     }
 }

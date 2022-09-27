@@ -1,8 +1,3 @@
-highmoblity:
-  api-secret:
-  jwt:
-    api-version:
-    app-id:
-    aud:
-    iss:
-    privateKeyString:
+spring:
+  application.name: high-mobility-source
+  config.import: "optional:configserver:"

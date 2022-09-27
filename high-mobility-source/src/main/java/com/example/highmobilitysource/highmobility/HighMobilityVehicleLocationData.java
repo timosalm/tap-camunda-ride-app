@@ -4,12 +4,9 @@ import java.util.Date;
 
 public record HighMobilityVehicleLocationData(Coordinates coordinates) {
 
-    public Double getLatitude() {
-        return coordinates.data().latitude().value();
-    }
-
-    public Double getLongitude() {
-        return coordinates.data().longitude().value();
+    public VehicleLocation toDomain(String vin) {
+        return new VehicleLocation(vin, coordinates.data().latitude().value(), coordinates.data().longitude().value(),
+                coordinates.timestamp());
     }
 }
 

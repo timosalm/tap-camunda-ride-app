@@ -1,0 +1,4 @@
+spring:
+  cloud.config.enabled: false
+  rabbitmq.stream.name: test
+highmoblity.api-secret: test
