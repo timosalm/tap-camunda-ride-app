@@ -1,0 +1,3 @@
+spring:
+  application.name: ride-service
+  config.import: "optional:configserver:"

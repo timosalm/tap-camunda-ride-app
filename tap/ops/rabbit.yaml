@@ -10,4 +10,41 @@ spec:
   rabbitmq:
     additionalPlugins:
     - rabbitmq_stream
-    - rabbitmq_web_mqtt
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rmq-1
+spec:
+  routes:
+  - services:
+    - name: rmq-1
+      port: 5672
+  - conditions:
+    - prefix: /ws
+    enableWebsockets: true
+    services:
+    - name: rmq-1
+      port: 15675
+  virtualhost:
+    fqdn: rmq-1-camundacon.emea.end2end.link
+    tls:
+      secretName: tanzu-system-ingress/contour-tls-delegation-cert
+#metadata:
+#  name: kube-shell
+#  namespace: k8s-papivot-tools
+#spec:
+#  virtualhost:
+#    fqdn: kube-shell.env1.lab.test
+#    tls:
+#      secretName: kube-shell-tls
+#  routes:
+#  - services:
+#    - name: kube-shell
+#      port: 80
+#  - conditions:
+#    - prefix: /ws
+#    enableWebsockets: true
+#    services:
+#    - name: kube-shell
+#      port: 80
