@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: high-mobility-source
+  description: TAP Camunda Ride App High Mobility Source
+  tags:
+    - ride-app
+  annotations:
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=high-mobility-source'
+    'backstage.io/techdocs-ref': dir:.
+spec:
+  type: service
+  lifecycle: experimental
+  owner: team-vmware-tanzu-se
+  system: ride-app-system
+  dependsOn:
+  - Resource:authserver-1
+  - Resource:configserver
+  - Resource:rmq-1
