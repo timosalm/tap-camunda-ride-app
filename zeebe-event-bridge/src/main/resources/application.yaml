@@ -1,0 +1,5 @@
+spring:
+  application.name: zeebe-event-bridge # for config server
+  config.import: "optional:configserver:"
+  cloud.stream.bindings:
+    handleEvent-in-0.destination: ${zeebe-event-bridge.ride-in-exchange-name}

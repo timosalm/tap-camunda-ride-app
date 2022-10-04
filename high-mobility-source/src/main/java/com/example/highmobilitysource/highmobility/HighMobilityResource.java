@@ -33,7 +33,7 @@ public class HighMobilityResource {
     @PostMapping
     public ResponseEntity<Void> handleEvent(@RequestHeader("X-HM-Signature") String signature,
                                             @RequestHeader("X-HM-Event") String event, @RequestBody String body) {
-        log.info("New event \"" + event + "\"");
+        log.info("New event from High Mobility Webhook \"" + event + "\"");
         if (isInvalidSignature(signature, body)) {
             log.debug("Invalid signature " + signature + " for body: " + body);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -42,7 +42,7 @@ public class HighMobilityResource {
         Delivery delivery;
         try {
             delivery = new ObjectMapper().readValue(body, Delivery.class);
-            log.debug("Delivery: " + delivery.toString());
+            log.debug("High Mobility Webhook Delivery: " + delivery.toString());
         } catch (JsonProcessingException e) {
             return ResponseEntity.badRequest().build();
         }

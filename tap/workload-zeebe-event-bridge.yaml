@@ -1,0 +1,31 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: zeebe-event-bridge
+  annotations:
+    autoscaling.knative.dev/min-scale: "1"
+  labels:
+    app.kubernetes.io/part-of: zeebe-event-bridge
+    apps.tanzu.vmware.com/workload-type: queue
+spec:
+  build:
+    env:
+      - name: BP_JVM_VERSION
+        value: "17"
+  source:
+    git:
+      url: https://github.com/tsalm-pivotal/tap-camunda-ride-app
+      ref:
+        branch: main
+  #    subPath: high-mobility-source
+  serviceClaims:
+    - name: rmq
+      ref:
+        apiVersion: rabbitmq.com/v1beta1
+        kind: RabbitmqCluster
+        name: rmq-1
+    - name: config-server
+      ref:
+        apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+        kind: ResourceClaim
+        name: configserver-binding-compatible

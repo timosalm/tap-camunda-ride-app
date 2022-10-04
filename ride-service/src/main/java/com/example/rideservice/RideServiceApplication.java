@@ -2,10 +2,13 @@ package com.example.rideservice;
 
 import com.rabbitmq.stream.Environment;
 import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.StreamListenerContainer;
 import org.springframework.web.reactive.HandlerMapping;
@@ -37,6 +40,12 @@ public class RideServiceApplication {
 	@Bean
 	RabbitListenerContainerFactory<StreamListenerContainer> rabbitListenerContainerFactory(Environment environment) {
 		return new StreamRabbitListenerContainerFactory(environment);
+	}
+
+	@Primary
+	@Bean
+	public MessageConverter messageConverter() {
+		return new Jackson2JsonMessageConverter();
 	}
 
 	public static void main(String[] args) {

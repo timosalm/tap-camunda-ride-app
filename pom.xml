@@ -11,6 +11,7 @@
     <modules>
         <module>high-mobility-source</module>
         <module>ride-service</module>
+        <module>zeebe-event-bridge</module>
     </modules>
 
 </project>

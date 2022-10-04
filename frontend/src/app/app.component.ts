@@ -101,7 +101,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-
   private setMarkerIconBasedOnZoom(marker: google.maps.Marker): void {
     let zoom = this.map.getZoom();
     marker.setIcon({
