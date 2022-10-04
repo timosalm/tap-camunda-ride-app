@@ -11,7 +11,7 @@
 	<groupId>com.demo</groupId>
 	<artifactId>camunda-process-deployer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>table-service</name>
+	<name>Camunda Process Deployer</name>
 	<description>Demo project</description>
 	<properties>
 		<java.version>8</java.version>

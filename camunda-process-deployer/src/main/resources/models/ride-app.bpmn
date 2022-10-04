@@ -233,7 +233,7 @@
       <bpmndi:BPMNShape id="Event_1jdk3xx_di" bpmnElement="Event_1qqhxlr">
         <dc:Bounds x="662" y="292" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="687" y="326" width="45" height="27" />
+          <dc:Bounds x="687" y="336" width="45" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1jnkxe4_di" bpmnElement="Event_1jnkxe4">
