@@ -30,7 +30,7 @@ public class HighMobilityApplicationService {
         var vehicleLocation = fetchVehicleLocation(vin);
         log.info("Location data for vehicle " + vin + ": " + vehicleLocation.latitude() + ", " +
                 vehicleLocation.longitude() + ", " + vehicleLocation.heading());
-        streamTemplate.convertAndSend(vehicleLocation);
+        streamTemplate.convertAndSend(new VehicleLocationChangedBusinessEvent(vehicleLocation));
     }
 
     private VehicleLocation fetchVehicleLocation(String vin) {

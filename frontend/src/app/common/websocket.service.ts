@@ -4,23 +4,17 @@ import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {environment} from "../../environments/environment";
-
-export interface VehicleLocation {
-  vin: string;
-  latitude: number,
-  longitude: number,
-  timestamp: Date
-}
+import {BusinessEvent} from "./business-event.entity";
 
 @Injectable()
 export class WebsocketService {
   private subject: AnonymousSubject<MessageEvent>;
-  public messages: Subject<VehicleLocation>;
+  public events: Subject<BusinessEvent>;
 
   constructor() {
-    this.messages = <Subject<VehicleLocation>>this.connect(environment.websocket_url).pipe(
+    this.events = <Subject<BusinessEvent>>this.connect(environment.websocket_url).pipe(
       map(
-        (response: MessageEvent): VehicleLocation => {
+        (response: MessageEvent): BusinessEvent => {
           console.log(response.data);
           return JSON.parse(response.data);
         }
