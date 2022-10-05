@@ -1,0 +1,3 @@
+spring:
+  application.name: camunda-process-deployer # for config server
+  config.import: "optional:configserver:"

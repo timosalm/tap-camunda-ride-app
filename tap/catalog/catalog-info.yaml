@@ -10,7 +10,8 @@ spec:
     - ./systems/ride-app-system.yaml
     - ./components/service/high-mobility-source-component.yaml
     - ./components/service/ride-service-component.yaml
-    - ./components/service/zeebe-event-bridge.yaml
+    - ./components/service/zeebe-event-bridge-component.yaml
+    - ./components/service/camunda-process-deployer-component.yaml
     - ./groups/department.yaml
     - ./groups/org.yaml
     - ./groups/team.yaml
