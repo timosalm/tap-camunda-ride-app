@@ -1,3 +1,4 @@
 spring:
   cloud.config.enabled: false
   rabbitmq.stream.name: test
+ride.zeebe-exchange-name: test

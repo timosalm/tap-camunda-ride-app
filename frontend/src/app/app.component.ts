@@ -6,7 +6,7 @@ import {BusinessEvent} from "./common/business-event.entity";
 import {VehicleLocation} from "./vehicle-location.entity";
 import {RideRequest} from "./ride-request.entity";
 import {Location} from "./location.entity";
-
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-root',
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!placesLocation) return;
 
       let rideRequest = new RideRequest(this.userLocation, new Location(placesLocation.lat(), placesLocation.lng()));
-      this.websocketService.events.next(new BusinessEvent(BusinessEvent.RIDE_REQUESTED, rideRequest));
+      this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.RIDE_REQUESTED, rideRequest));
 
       if (this.destinationMarker) {
         this.destinationMarker.setPosition(placesLocation);

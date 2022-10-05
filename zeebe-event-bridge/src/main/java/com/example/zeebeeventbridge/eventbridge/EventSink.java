@@ -16,7 +16,7 @@ public class EventSink {
     private static final Logger log = LoggerFactory.getLogger(EventSink.class);
     private final ZeebeClient zeebeClient;
 
-    @Value("${(zeebe-event-bridge.bpmn-process-id}")
+    @Value("${zeebe-event-bridge.bpmn-process-id}")
     private String bpmnProcessId;
 
     public EventSink(ZeebeClient zeebeClient) {
@@ -27,12 +27,8 @@ public class EventSink {
     public Consumer<BusinessEvent> handleEvent() {
         return event -> {
             log.info("handleEvent called for event: " + event);
-            if (BusinessEvent.RIDE_REQUESTED.equals(event.type())) {
-                try {
-                    startProcessInstance(event.getDataAsObject(RideRequestData.class));
-                } catch (JsonProcessingException e) {
-                    log.error("Unable to convert business event data from JSON to RideRequestData" + e.getMessage());
-                }
+            if (BusinessEvent.RIDE_REQUESTED.equals(event.getType())) {
+                startProcessInstance((RideRequestData) event.getData());
             }
         };
     }
