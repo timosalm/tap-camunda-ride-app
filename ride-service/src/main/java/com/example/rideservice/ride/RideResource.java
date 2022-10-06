@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 @RestController
@@ -24,10 +26,27 @@ public class RideResource {
         this.rideApplicationService = rideApplicationService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> sendRideRequestNotificationToDrivers(@NotNull @Valid @RequestBody RideRequestData rideRequestData) {
-        log.info("sendRideRequestNotificationToDrivers called with data: " + rideRequestData);
-        this.rideApplicationService.handleEvent(new BusinessEvent(UUID.randomUUID(), BusinessEvent.DRIVER_ACCEPTED, ""));
+    @PostMapping("/ride-request-notification")
+    public ResponseEntity<Void> sendRideRequestNotificationToDrivers(
+            @NotNull @Valid @RequestBody RideRequestNotificationData rideRequestNotificationData
+    ) {
+        log.info("sendRideRequestNotificationToDrivers called with data: " + rideRequestNotificationData);
+
+        this.rideApplicationService.sendRideRequestNotificationToDrivers(rideRequestNotificationData);
         return ResponseEntity.accepted().build();
     }
+
+    @PostMapping("/match-confirmation-notification")
+    public ResponseEntity<Void> sendMatchConfirmationNotification(
+            @NotNull @Valid @RequestBody MatchConfirmationNotificationData matchConfirmationNotificationData
+    ) {
+        log.info("sendMatchConfirmationNotification called with data: " + matchConfirmationNotificationData);
+
+        this.rideApplicationService.sendMatchConfirmationNotification(matchConfirmationNotificationData);
+
+        return ResponseEntity.accepted().build();
+    }
+
+
+
 }

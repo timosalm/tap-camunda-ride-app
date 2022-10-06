@@ -1,1 +1,4 @@
-spring.cloud.config.enabled: false
+spring:
+  cloud.config.enabled: false
+  rabbitmq.stream.name: test
+  datasource.url: jdbc:h2:mem:testdb

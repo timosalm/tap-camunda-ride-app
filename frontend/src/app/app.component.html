@@ -1,8 +1,22 @@
 
-<div>
-  <input #gmapSearchField id="map-search-field" type="text" />
-  <div #gmapContainer id="map"></div>
+<div class="row">
+  <div class="column">
+    <h2>Rider</h2>
+    <input #gmapSearchField id="map-search-field" type="text" />
+    <div #gmapContainer id="map"></div>
+  </div>
+  <div class="column">
+    <h2>Driver {{driver}}</h2>
+
+    <h3>Requests</h3>
+    <ul>
+      <li *ngFor="let notification of driverRequestNotifications">
+        <span>{{notification.startingPoint}} -> {{notification.destination}}</span><button (click)="acceptRide(notification.userId)">Accept</button></li>
+    </ul>
+
+  </div>
 </div>
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->

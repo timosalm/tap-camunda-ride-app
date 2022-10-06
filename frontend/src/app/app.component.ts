@@ -7,6 +7,8 @@ import {VehicleLocation} from "./vehicle-location.entity";
 import {RideRequest} from "./ride-request.entity";
 import {Location} from "./location.entity";
 import * as uuid from 'uuid';
+import {NotifyDriverData} from "./notify-driver-data.entity";
+import {RideAcceptance} from "./ride-acceptance.entity";
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @ViewChild('gmapContainer', {static: false}) gmap: ElementRef;
   @ViewChild('gmapSearchField', {static: false}) gmapSearchField: ElementRef;
+  driver = '1HMD11338H4E954D9';
+  driverRequestNotifications: NotifyDriverData[] = [];
 
   private subscription: Subscription;
   private map: google.maps.Map;
@@ -40,8 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     let mapOptions: google.maps.MapOptions = {
       zoom: 16,
-      minZoom: 15,
-      maxZoom: 18,
       streetViewControl: false,
     };
     this.map = new google.maps.Map(this.gmap.nativeElement, mapOptions);
@@ -78,6 +80,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  acceptRide(userId: string) {
+    let rideAcceptance = new RideAcceptance(userId, this.driver);
+    this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.DRIVER_ACCEPTED, rideAcceptance));
+    this.driverRequestNotifications = this.driverRequestNotifications.filter(obj => obj.userId !== userId);
+  }
+
   private handleBusinessEvent(event: BusinessEvent) {
     if (event.type === BusinessEvent.VEHICLE_LOCATION_CHANGED) {
       let location = event.data as VehicleLocation
@@ -99,6 +107,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.setMarkerIconBasedOnZoom(newMarker);
         this.markers.push(newMarker);
       }
+    } else if (event.type === BusinessEvent.NOTIFY_DRIVER) {
+      let driverRequestNotification = event.data as NotifyDriverData;
+      if (driverRequestNotification.driver === this.driver) {
+        this.driverRequestNotifications.push(driverRequestNotification);
+      }
+    } else if (event.type === BusinessEvent.MATCH_CONFIRMED) {
+
     }
   }
 

@@ -20,8 +20,18 @@ spec:
         branch: main
   #    subPath: high-mobility-source
   serviceClaims:
+  - name: rmq
+    ref:
+      apiVersion: rabbitmq.com/v1beta1
+      kind: RabbitmqCluster
+      name: rmq-1
   - name: config-server
     ref:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       name: configserver-binding-compatible
+  - name: db
+    ref:
+      apiVersion: sql.tanzu.vmware.com/v1
+      kind: Postgres
+      name: postgres-1

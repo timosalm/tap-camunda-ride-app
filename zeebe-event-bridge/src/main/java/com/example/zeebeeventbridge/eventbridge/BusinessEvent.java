@@ -11,13 +11,16 @@ public class BusinessEvent {
 
     public static final String RIDE_REQUESTED = "ride-requested";
     public static final String DRIVER_ACCEPTED = "driver-accepted";
+    public static final String RIDER_PICKED_UP = "rider-picked-up";
+    public static final String RIDE_FINISHED = "ride-finished";
 
     private UUID id;
     private String type;
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
     @JsonSubTypes(value = {
             @JsonSubTypes.Type(value = RideRequestData.class, name = RIDE_REQUESTED),
-            @JsonSubTypes.Type(value = String.class, name = DRIVER_ACCEPTED)
+            @JsonSubTypes.Type(value = RideAcceptance.class, name = DRIVER_ACCEPTED),
+            @JsonSubTypes.Type(value = RideProgressData.class, name = RIDER_PICKED_UP),
     })
     private EventData data;
 

@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: get-drivers-service
+  description: TAP Camunda Ride App Zeebe Get Drivers Service
+  tags:
+    - ride-app
+  annotations:
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=get-drivers-service'
+    'backstage.io/techdocs-ref': dir:.
+spec:
+  type: service
+  lifecycle: experimental
+  owner: team-vmware-tanzu-se
+  system: ride-app-system
+  dependsOn:
+    - Resource:authserver-1
+    - Resource:configserver
+    - Resource:postgres-1
+    - Resource:rmq-1

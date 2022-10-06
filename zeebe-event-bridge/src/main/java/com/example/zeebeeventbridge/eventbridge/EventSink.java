@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,21 +31,34 @@ public class EventSink {
     public Consumer<BusinessEvent> handleEvent() {
         return event -> {
             log.info("handleEvent called for event: " + event);
-            if (BusinessEvent.RIDE_REQUESTED.equals(event.getType())) {
-                startProcessInstance((RideRequestData) event.getData());
-            } else if (BusinessEvent.DRIVER_ACCEPTED.equals(event.getType())) {
-                publishMessage("msg_accept", "af659827-db47-4111-a255-8a3516fa70a4",
-                        Map.of("vin", "1HMD11338H4E954D9"));
+            switch (event.getType()) {
+                case BusinessEvent.RIDE_REQUESTED:
+                    startProcessInstance((RideRequestData) event.getData());
+                case BusinessEvent.DRIVER_ACCEPTED:
+                     var rideAcceptance = (RideAcceptance) event.getData();
+                    publishMessage("msg_accept", rideAcceptance.getUserId().toString(),
+                            Map.of("driverId", rideAcceptance.getDriver()));
+                case BusinessEvent.RIDER_PICKED_UP:
+                    publishMessage("msg_met", ((RideProgressData) event.getData()).getUserId().toString(),
+                            Map.of());
+                case BusinessEvent.RIDE_FINISHED:
+                    publishMessage("msg_rideFinished", ((RideProgressData) event.getData()).getUserId().toString(),
+                            Map.of());
+                default:
+                    log.info("Unhandled event: " + event);
             }
         };
     }
 
     private void startProcessInstance(RideRequestData rideRequestData) {
         log.info("Starting process " + bpmnProcessId + " with variables: " + rideRequestData);
+
+        var variables = Map.of("destination", rideRequestData.getTo(),
+                "startingPoint", rideRequestData.getTo(), "userId", rideRequestData.getUserId());
         this.zeebeClient.newCreateInstanceCommand()
                 .bpmnProcessId(bpmnProcessId)
                 .latestVersion()
-                .variables(rideRequestData)
+                .variables(variables)
                 .send();
     }
 

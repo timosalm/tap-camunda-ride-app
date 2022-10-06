@@ -68,6 +68,10 @@ public class RideServiceWebSocketHandler implements WebSocketHandler {
            return;
         }
 
+        publishEvent(event);
+    }
+
+    public void publishEvent(BusinessEvent event) {
         log.info("Forwarding business event to client: " + event);
         var result = sink.tryEmitNext(event);
 

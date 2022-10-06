@@ -1,12 +1,14 @@
 package com.example.zeebeeventbridge.eventbridge;
 
+import java.util.UUID;
+
 public class RideRequestData extends EventData {
 
     private Location from;
     private Location to;
-    private String userId;
+    private UUID userId;
 
-    public RideRequestData(Location from, Location to, String userId) {
+    public RideRequestData(Location from, Location to, UUID userId) {
         this.from = from;
         this.to = to;
         this.userId = userId;
@@ -22,7 +24,7 @@ public class RideRequestData extends EventData {
         return from;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 }
