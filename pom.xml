@@ -13,6 +13,10 @@
         <module>ride-service</module>
         <module>zeebe-event-bridge</module>
         <module>camunda-process-deployer</module>
+        <module>driver-match-service</module>
+        <module>get-drivers-service</module>
+        <module>invoice-service</module>
+        <module>payment-service</module>
     </modules>
 
 </project>

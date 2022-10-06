@@ -10,12 +10,14 @@ import java.util.UUID;
 public class BusinessEvent {
 
     public static final String RIDE_REQUESTED = "ride-requested";
+    public static final String DRIVER_ACCEPTED = "driver-accepted";
 
     private UUID id;
     private String type;
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
     @JsonSubTypes(value = {
             @JsonSubTypes.Type(value = RideRequestData.class, name = RIDE_REQUESTED),
+            @JsonSubTypes.Type(value = String.class, name = DRIVER_ACCEPTED)
     })
     private EventData data;
 

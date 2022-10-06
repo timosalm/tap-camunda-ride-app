@@ -26,7 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private receivedEvents: BusinessEvent[] = [];
   private userLocation: Location;
   private destinationMarker: google.maps.Marker;
-
+  //private userId: string = uuid.v4();
+  private userId: string = "af659827-db47-4111-a255-8a3516fa70a4";
   constructor(private websocketService: WebsocketService) {}
 
   ngOnInit(): void {
@@ -58,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
       let placesLocation = this.searchBox.getPlaces()[0].geometry?.location;
       if (!placesLocation) return;
 
-      let rideRequest = new RideRequest(this.userLocation, new Location(placesLocation.lat(), placesLocation.lng()));
+      let rideRequest = new RideRequest(this.userId, this.userLocation, new Location(placesLocation.lat(), placesLocation.lng()));
       this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.RIDE_REQUESTED, rideRequest));
 
       if (this.destinationMarker) {

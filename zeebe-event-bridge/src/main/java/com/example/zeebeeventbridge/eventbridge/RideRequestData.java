@@ -4,10 +4,12 @@ public class RideRequestData extends EventData {
 
     private Location from;
     private Location to;
+    private String userId;
 
-    public RideRequestData(Location from, Location to) {
+    public RideRequestData(Location from, Location to, String userId) {
         this.from = from;
         this.to = to;
+        this.userId = userId;
     }
 
     private RideRequestData() {}
@@ -18,6 +20,10 @@ public class RideRequestData extends EventData {
 
     public Location getFrom() {
         return from;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }
 

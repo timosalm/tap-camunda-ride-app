@@ -1,0 +1,3 @@
+spring:
+  application.name: driver-match-service
+  config.import: "optional:configserver:"

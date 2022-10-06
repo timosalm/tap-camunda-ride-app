@@ -12,6 +12,9 @@ spec:
     - ./components/service/ride-service-component.yaml
     - ./components/service/zeebe-event-bridge-component.yaml
     - ./components/service/camunda-process-deployer-component.yaml
+    - ./components/service/driver-match-service-component.yaml
+    - ./components/service/payment-service-component.yaml
+    - ./components/service/invoice-service-component.yaml
     - ./groups/department.yaml
     - ./groups/org.yaml
     - ./groups/team.yaml

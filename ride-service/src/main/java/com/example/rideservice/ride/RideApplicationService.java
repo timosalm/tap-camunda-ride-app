@@ -18,11 +18,9 @@ public class RideApplicationService {
     }
 
     public void handleEvent(BusinessEvent event) {
-        if (BusinessEvent.RIDE_REQUESTED.equals(event.type())) {
-            if (zeebeExchangeName == null || zeebeExchangeName.isEmpty()) {
-                throw new RuntimeException("ride.zeebe-exchange-name not set");
-            }
-            rabbitTemplate.convertAndSend(this.zeebeExchangeName, "#", event);
+        if (zeebeExchangeName == null || zeebeExchangeName.isEmpty()) {
+            throw new RuntimeException("ride.zeebe-exchange-name not set");
         }
+        rabbitTemplate.convertAndSend(this.zeebeExchangeName, "#", event);
     }
 }

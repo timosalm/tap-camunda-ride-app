@@ -1,0 +1,3 @@
+spring:
+  application.name: get-drivers-service
+  config.import: "optional:configserver:"
