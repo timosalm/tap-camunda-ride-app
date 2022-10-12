@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
@@ -20,11 +21,14 @@ public class RideServiceWebSocketHandler implements WebSocketHandler {
     private static final Logger log = LoggerFactory.getLogger(RideServiceWebSocketHandler.class);
 
     private final Sinks.Many<BusinessEvent> sink;
-    private final RideApplicationService rideApplicationService;
+    private RideApplicationService rideApplicationService;
 
-    public RideServiceWebSocketHandler(RideApplicationService rideApplicationService) {
-        this.rideApplicationService = rideApplicationService;
+    public RideServiceWebSocketHandler() {
         this.sink = Sinks.many().multicast().directBestEffort();
+    }
+
+    public void setRideApplicationService(RideApplicationService rideApplicationService) {
+        this.rideApplicationService = rideApplicationService;
     }
 
     @Override

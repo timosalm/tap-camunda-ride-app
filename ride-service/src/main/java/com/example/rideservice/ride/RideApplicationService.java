@@ -6,15 +6,14 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.annotation.PostConstruct;
 import java.util.UUID;
 
 @Service
 public class RideApplicationService {
 
     private final RabbitTemplate rabbitTemplate;
-    private final RideServiceWebSocketHandler rideServiceWebSocketHandler;
+    private RideServiceWebSocketHandler rideServiceWebSocketHandler;
 
     @Value("${ride.zeebe-exchange-name}")
     private String zeebeExchangeName;
@@ -22,6 +21,11 @@ public class RideApplicationService {
     public RideApplicationService(RabbitTemplate rabbitTemplate, RideServiceWebSocketHandler rideServiceWebSocketHandler) {
         this.rabbitTemplate = rabbitTemplate;
         this.rideServiceWebSocketHandler = rideServiceWebSocketHandler;
+    }
+
+    @PostConstruct
+    public void init() {
+        this.rideServiceWebSocketHandler.setRideApplicationService(this);
     }
 
     public void handleEvent(BusinessEvent event) {
@@ -38,26 +42,10 @@ public class RideApplicationService {
                 this.rideServiceWebSocketHandler.publishEvent(
                         new BusinessEvent(UUID.randomUUID(), BusinessEvent.NOTIFY_DRIVER, notifyDriverData));
         });
-          //      this.handleEvent(new BusinessEvent(UUID.randomUUID(),
-          //      BusinessEvent.DRIVER_ACCEPTED, new RideAcceptance(driver, rideRequestNotificationData.userId()))));
     }
 
     public void sendMatchConfirmationNotification(MatchConfirmationNotificationData matchConfirmationNotificationData) {
         this.rideServiceWebSocketHandler.publishEvent(
                 new BusinessEvent(UUID.randomUUID(), BusinessEvent.MATCH_CONFIRMED, matchConfirmationNotificationData));
-
-        /*
-        this.handleEvent(new BusinessEvent(UUID.randomUUID(), BusinessEvent.RIDER_PICKED_UP,
-                new RideProgressData(matchConfirmationNotificationData.userId())));
-
-        var _this = this;
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                _this.handleEvent(new BusinessEvent(UUID.randomUUID(), BusinessEvent.RIDE_FINISHED,
-                        new RideProgressData(matchConfirmationNotificationData.userId())));
-            }
-        }, 5000);
-        */
     }
 }

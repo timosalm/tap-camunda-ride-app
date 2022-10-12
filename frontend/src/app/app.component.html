@@ -1,29 +1,46 @@
 
 <div class="row">
   <div class="column">
-    <h2>Rider</h2>
-    <input #gmapSearchField id="map-search-field" type="text" />
-    <div #gmapContainer id="map"></div>
+    <h2>Rider (ID: {{userId}})</h2>
+    <div  [style.visibility]="showMap ? 'visible' : 'hidden'">
+      <input #gmapSearchField id="map-search-field" type="text" />
+      <div #gmapContainer id="map"></div>
+    </div>
+
+    <div *ngIf="!riderNotifyMatchData && !showMap">
+      Searching for the closest driver ...
+    </div>
+
+    <div *ngIf="riderNotifyMatchData && !rideFinished">
+      You will be picked up by driver (ID: {{riderNotifyMatchData.driver || ''}})
+    </div>
+
+    <div *ngIf="rideFinished">
+      <p>Thanks for your ride with driver (ID: {{riderNotifyMatchData?.driver || ''}})</p>
+      <button (click)="resetUI()">New Ride</button>
+    </div>
   </div>
   <div class="column">
-    <h2>Driver {{driver}}</h2>
+    <h2>Driver (ID: {{driver}})</h2>
 
-    <h3>Requests</h3>
-    <ul>
-      <li *ngFor="let notification of driverRequestNotifications">
-        <span>{{notification.startingPoint}} -> {{notification.destination}}</span><button (click)="acceptRide(notification.userId)">Accept</button></li>
-    </ul>
+    <div *ngIf="!driverNotifyMatchData">
+      <h3>Requests</h3>
+      <ul>
+        <li *ngFor="let notification of driverRequestNotifications">
+          <span>({{notification.startingPoint.latitude}}/{{notification.startingPoint.longitude}}) -> ({{notification.destination.latitude}}/{{notification.destination.longitude}})</span>
+          <button (click)="acceptRide(notification.userId)">Accept</button></li>
+      </ul>
+    </div>
 
+    <div *ngIf="driverNotifyMatchData && !riderPickedUp">
+      <p>Please pick up rider (ID: {{riderNotifyMatchData?.userId}})</p>
+      <button (click)="pickUpRider(riderNotifyMatchData?.userId || '')">Picked Up Rider</button>
+    </div>
+
+    <div *ngIf="riderPickedUp">
+      <button (click)="finishRide(riderNotifyMatchData?.userId || '')">Finish Ride</button>
+    </div>
   </div>
 </div>
-
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <router-outlet></router-outlet>

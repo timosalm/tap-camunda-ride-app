@@ -9,6 +9,8 @@ import {Location} from "./location.entity";
 import * as uuid from 'uuid';
 import {NotifyDriverData} from "./notify-driver-data.entity";
 import {RideAcceptance} from "./ride-acceptance.entity";
+import {NotifyMatchData} from "./notify-match-data.entity";
+import {Rider} from "./rider.entity";
 
 @Component({
   selector: 'app-root',
@@ -20,8 +22,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @ViewChild('gmapContainer', {static: false}) gmap: ElementRef;
   @ViewChild('gmapSearchField', {static: false}) gmapSearchField: ElementRef;
+  userId = "af659827-db47-4111-a255-8a3516fa70a4";
+  showMap = true;
+  riderNotifyMatchData?: NotifyMatchData
+  pickedUp = false;
+  rideFinished = false;
+
   driver = '1HMD11338H4E954D9';
   driverRequestNotifications: NotifyDriverData[] = [];
+  driverNotifyMatchData?: NotifyMatchData
+  riderPickedUp = false;
 
   private subscription: Subscription;
   private map: google.maps.Map;
@@ -30,8 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private receivedEvents: BusinessEvent[] = [];
   private userLocation: Location;
   private destinationMarker: google.maps.Marker;
-  //private userId: string = uuid.v4();
-  private userId: string = "af659827-db47-4111-a255-8a3516fa70a4";
   constructor(private websocketService: WebsocketService) {}
 
   ngOnInit(): void {
@@ -63,7 +71,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
       let rideRequest = new RideRequest(this.userId, this.userLocation, new Location(placesLocation.lat(), placesLocation.lng()));
       this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.RIDE_REQUESTED, rideRequest));
-
       if (this.destinationMarker) {
         this.destinationMarker.setPosition(placesLocation);
       } else {
@@ -81,9 +88,30 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   acceptRide(userId: string) {
+    this.showMap = false;
     let rideAcceptance = new RideAcceptance(userId, this.driver);
     this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.DRIVER_ACCEPTED, rideAcceptance));
     this.driverRequestNotifications = this.driverRequestNotifications.filter(obj => obj.userId !== userId);
+  }
+
+  pickUpRider(userId: string) {
+    this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.RIDER_PICKED_UP, new Rider(userId)));
+    this.pickedUp = true;
+    this.riderPickedUp = true;
+  }
+
+  finishRide(userId: string) {
+    this.websocketService.events.next(new BusinessEvent(uuid.v4(), BusinessEvent.RIDE_FINISHED, new Rider(userId)));
+    this.driverNotifyMatchData = undefined;
+    this.rideFinished = true;
+    this.riderPickedUp = false;
+  }
+
+  resetUI() {
+    this.rideFinished = false;
+    this.pickedUp = false;
+    this.riderNotifyMatchData = undefined;
+    this.showMap = true;
   }
 
   private handleBusinessEvent(event: BusinessEvent) {
@@ -113,7 +141,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.driverRequestNotifications.push(driverRequestNotification);
       }
     } else if (event.type === BusinessEvent.MATCH_CONFIRMED) {
-
+      let notifyMatchData = event.data as NotifyMatchData;
+      if (notifyMatchData.userId === this.userId) {
+        this.riderNotifyMatchData = notifyMatchData;
+      }
+      if (notifyMatchData.driver === this.driver) {
+        this.driverNotifyMatchData = notifyMatchData;
+      }
     }
   }
 
@@ -150,4 +184,5 @@ export class AppComponent implements OnInit, OnDestroy {
       map: this.map
     });
   }
+
 }

@@ -21,6 +21,8 @@ public class BusinessEvent {
             @JsonSubTypes.Type(value = RideRequestData.class, name = RIDE_REQUESTED),
             @JsonSubTypes.Type(value = RideAcceptance.class, name = DRIVER_ACCEPTED),
             @JsonSubTypes.Type(value = RideProgressData.class, name = RIDER_PICKED_UP),
+            @JsonSubTypes.Type(value = RideProgressData.class, name = RIDE_FINISHED),
+
     })
     private EventData data;
 
@@ -43,5 +45,14 @@ public class BusinessEvent {
 
     public EventData getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return "BusinessEvent{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

@@ -34,16 +34,20 @@ public class EventSink {
             switch (event.getType()) {
                 case BusinessEvent.RIDE_REQUESTED:
                     startProcessInstance((RideRequestData) event.getData());
+                    break;
                 case BusinessEvent.DRIVER_ACCEPTED:
                      var rideAcceptance = (RideAcceptance) event.getData();
                     publishMessage("msg_accept", rideAcceptance.getUserId().toString(),
                             Map.of("driverId", rideAcceptance.getDriver()));
+                    break;
                 case BusinessEvent.RIDER_PICKED_UP:
                     publishMessage("msg_met", ((RideProgressData) event.getData()).getUserId().toString(),
-                            Map.of());
+                            Map.of("userId", ((RideProgressData) event.getData()).getUserId().toString()));
+                    break;
                 case BusinessEvent.RIDE_FINISHED:
                     publishMessage("msg_rideFinished", ((RideProgressData) event.getData()).getUserId().toString(),
-                            Map.of());
+                            Map.of("userId", ((RideProgressData) event.getData()).getUserId().toString()));
+                    break;
                 default:
                     log.info("Unhandled event: " + event);
             }

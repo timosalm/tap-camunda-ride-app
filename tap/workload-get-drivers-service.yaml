@@ -18,7 +18,6 @@ spec:
       url: https://github.com/tsalm-pivotal/tap-camunda-ride-app
       ref:
         branch: main
-  #    subPath: high-mobility-source
   serviceClaims:
   - name: rmq
     ref:

@@ -1,5 +1,14 @@
-h2 {
+* {
   font-family: Arial;
+  text-align: center;
+}
+
+li {
+  list-style: none;
+}
+
+button {
+  display: block;
 }
 
 #map { height: 550px; width: 100%; }
